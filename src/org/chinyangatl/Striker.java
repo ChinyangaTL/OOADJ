@@ -6,12 +6,13 @@ public class Striker extends Player{
     private int numberOfGoals;
 
     public Striker() {
-        this.setPosition("Striker");
+        this.setPosition(PlayerPositions.STRIKER);
     }
 
-    public Striker(String firstName, String lastName, String age, String regNumber, int jerseyNumber, String position, Image profilePhoto, int yellowCards, int redCards, int numberOfGoals) {
-        super(firstName, lastName, age, regNumber, jerseyNumber, position, profilePhoto, yellowCards, redCards);
+    public Striker(String firstName, String lastName, String age, String regNumber, int jerseyNumber, Image profilePhoto, int yellowCards, int redCards, int numberOfGoals) {
+        super(firstName, lastName, age, regNumber, jerseyNumber, profilePhoto, yellowCards, redCards);
         this.numberOfGoals = numberOfGoals;
+        this.position = PlayerPositions.STRIKER
     }
 
     public int getNumberOfGoals() {

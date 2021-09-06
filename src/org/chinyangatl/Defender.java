@@ -6,12 +6,13 @@ public class Defender extends Player{
     private int numberOfTackles;
 
     public Defender() {
-        this.setPosition("Defender");
+        this.setPosition(PlayerPositions.DEFENDER);
     }
 
-    public Defender(String firstName, String lastName, String age, String regNumber, int jerseyNumber, String position, Image profilePhoto, int yellowCards, int redCards, int numberOfTackles) {
-        super(firstName, lastName, age, regNumber, jerseyNumber, position, profilePhoto, yellowCards, redCards);
+    public Defender(String firstName, String lastName, String age, String regNumber, int jerseyNumber, Image profilePhoto, int yellowCards, int redCards, int numberOfTackles) {
+        super(firstName, lastName, age, regNumber, jerseyNumber, profilePhoto, yellowCards, redCards);
         this.numberOfTackles = numberOfTackles;
+        this.position = PlayerPositions.DEFENDER;
     }
 
     public int getNumberOfTackles() {
