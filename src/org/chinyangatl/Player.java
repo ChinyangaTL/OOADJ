@@ -10,10 +10,17 @@ public abstract class Player extends EndUser{
     private int yellowCards;
     private int redCards;
 
+    public enum PlayerPositions {
+        GOALKEEPER,
+        DEFENDER,
+        MIDFIELDER,
+        STRIKER
+    }
+
     public Player() {
     }
 
-    public Player(String firstName, String lastName, String age, String regNumber, int jerseyNumber, String position, Image profilePhoto, int yellowCards, int redCards) {
+    public Player(String firstName, String lastName, String age, String regNumber, int jerseyNumber, PlayerPositions position, Image profilePhoto, int yellowCards, int redCards) {
         super(firstName, lastName, age);
         this.regNumber = regNumber;
         this.jerseyNumber = jerseyNumber;
