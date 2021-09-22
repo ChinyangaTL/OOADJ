@@ -3,12 +3,12 @@ package org.chinyangatl;
 import java.awt.*;
 
 public abstract class Player extends EndUser{
-    private String regNumber;
-    private int jerseyNumber;
-    private String position;
-    private Image profilePhoto;
-    private int yellowCards;
-    private int redCards;
+    protected String regNumber;
+    protected int jerseyNumber;
+    protected PlayerPositions position;
+    protected Image profilePhoto;
+    protected int yellowCards;
+    protected int redCards;
 
     public enum PlayerPositions {
         GOALKEEPER,
@@ -20,7 +20,7 @@ public abstract class Player extends EndUser{
     public Player() {
     }
 
-    public Player(String firstName, String lastName, String age, String regNumber, int jerseyNumber, PlayerPositions position, Image profilePhoto, int yellowCards, int redCards) {
+    public Player(String firstName, String lastName, String age, String regNumber, int jerseyNumber, Image profilePhoto, int yellowCards, int redCards) {
         super(firstName, lastName, age);
         this.regNumber = regNumber;
         this.jerseyNumber = jerseyNumber;
@@ -62,10 +62,10 @@ public abstract class Player extends EndUser{
     }
 
     public String getPosition() {
-        return position;
+        return position.toString();
     }
 
-    public void setPosition(String position) {
+    public void setPosition(PlayerPositions position) {
         this.position = position;
     }
 
