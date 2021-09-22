@@ -1,6 +1,6 @@
 package org.chinyangatl;
 
-public class EndUser {
+public abstract class EndUser {
     private String firstName;
     private String lastName;
     private String age;
@@ -16,13 +16,13 @@ public class EndUser {
     }
 
     // CLASS METHODS
-    public void login() {}
+    public abstract void login();
 
     public void viewLogTable() {}
 
     public  void viewFixtures() {}
 
-    // ACCESSORS AND MUTATORS
+
 
     public String getFirstName() {
         return firstName;

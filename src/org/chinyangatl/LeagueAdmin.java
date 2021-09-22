@@ -8,5 +8,10 @@ public class LeagueAdmin extends EndUser{
         super(firstName, lastName, age);
     }
 
+    @Override
+    public void login() {
+
+    }
+
     public void collectGameInfo(Fixture fixture) {}
 }

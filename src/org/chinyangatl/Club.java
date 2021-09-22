@@ -2,6 +2,7 @@ package org.chinyangatl;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Club {
     private String name;
@@ -10,7 +11,7 @@ public class Club {
     private Image logo;
     private Stadium stadium;
     private TeamAdmin teamAdmin;
-    private ArrayList<Player> players;
+    private List<Player> players;
     private Manager manager;
     private int points;
 
@@ -20,21 +21,23 @@ public class Club {
         this.stadium = stadium;
     }
 
-    public Club(String name, String address, ArrayList<String> owners, Image logo, Stadium stadium, TeamAdmin teamAdmin, ArrayList<Player> players, Manager manager, int points) {
+    public Club(String name, String address, ArrayList<String> owners, Image logo, Stadium stadium, TeamAdmin teamAdmin, Manager manager, int points) {
         this.name = name;
         this.address = address;
         this.owners = owners;
         this.logo = logo;
         this.stadium = stadium;
         this.teamAdmin = teamAdmin;
-        this.players = players;
+        this.players = new ArrayList<>();;
         this.manager = manager;
         this.points = points;
     }
 
-    public void buyPlayer(Player player, int numOfPlayers){}
+    public void buyPlayer(Player player, int numOfPlayers) {
+    }
 
-    public void sellPlayer(Player player) {}
+    public void sellPlayer(Player player) {
+    }
 
     public String getName() {
         return name;
@@ -84,11 +87,11 @@ public class Club {
         this.teamAdmin = teamAdmin;
     }
 
-    public ArrayList<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 
-    public void setPlayers(ArrayList<Player> players) {
+    public void setPlayers(List<Player> players) {
         this.players = players;
     }
 
@@ -106,5 +109,11 @@ public class Club {
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public void printPlayers() {
+        for (Player player : players) {
+            System.out.println(player);
+        }
     }
 }

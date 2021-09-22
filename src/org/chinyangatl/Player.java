@@ -23,6 +23,13 @@ public abstract class Player extends EndUser{
         this.redCards = redCards;
     }
 
+//    TODO MAYBE USE ENUMS FOR POSITION INSTEAD OF STRINGS ?
+
+    @Override
+    public void login() {
+        System.out.println("Player login");
+    }
+
     public boolean missesNextGame(int yellowCards) {
         return false;
     }

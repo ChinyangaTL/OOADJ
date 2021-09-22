@@ -8,6 +8,16 @@ public class TeamAdmin extends EndUser {
         super(firstName, lastName, age);
     }
 
+    @Override
+    public void login() {
+
+    }
+    
+    public void registerPlayer(Club club, Player player) {
+
+
+    }
+
     public void updateStadiumInfo(Stadium stadium){}
 
     public void updatePlayerInfo(Player player){}
