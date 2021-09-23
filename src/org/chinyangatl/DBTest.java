@@ -41,6 +41,11 @@ public class DBTest {
 
         System.out.println(dataSource.queryClubManager("Arsenal Football Club"));
 
+        System.out.println(dataSource.QUERY_CLUB);
+        System.out.println(dataSource.INSERT_MANAGER);
+        System.out.println(dataSource.INSERT_CLUB);
+        dataSource.insertManager("Jurgen", "Kloop", "Liverpool Football Club");
+
         dataSource.close();
     }
 }

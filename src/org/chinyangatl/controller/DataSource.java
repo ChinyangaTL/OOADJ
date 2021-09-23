@@ -52,7 +52,7 @@ public class DataSource {
     // check if values to be inserted already exist
     public static final String QUERY_CLUB = "SELECT " +
             COLUMN_CLUB_ID + " FROM " + TABLE_CLUB + " WHERE "
-            + COLUMN_CLUB_NAME + " ?";
+            + COLUMN_CLUB_NAME + " = ?";
 
     // statemetns needed to insert a manager
     public static final String INSERT_CLUB =
@@ -75,7 +75,7 @@ public class DataSource {
         try {
         connection = DriverManager.getConnection(CONNECTION_STRING, USERNAME, PASSWORD);
         queryClubManager = connection.prepareStatement(QUERY_CLUB_MANAGER_PREP);
-        insertIntoClub = connection.prepareStatement(INSERT_CLUB);
+        insertIntoClub = connection.prepareStatement(INSERT_CLUB, Statement.RETURN_GENERATED_KEYS);
         queryClub = connection.prepareStatement(QUERY_CLUB);
         insertIntoManager = connection.prepareStatement(INSERT_MANAGER);
             System.out.println("Connected to " + CONNECTION_STRING + USERNAME + PASSWORD);
@@ -211,6 +211,7 @@ public class DataSource {
             insertIntoManager.setString(1, fName);
             insertIntoManager.setString(2, lName);
             insertIntoManager.setInt(3, clubId);
+            System.out.println(fName + ", " + lName + ", " + clubId);
 
             int affectedRows = insertIntoClub.executeUpdate();
             if(affectedRows == 1) {
