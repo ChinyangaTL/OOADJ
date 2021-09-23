@@ -43,11 +43,18 @@ public class DataSource {
             " ON " + TABLE_MANAGER + "." + COLUMN_MANAGER_CURRENT_CLUB + " = "
             + TABLE_CLUB + "." + COLUMN_CLUB_ID;
 
+    public static final String QUERY_CLUB_MANAGER_PREP =
+            "SELECT " + TABLE_MANAGER + "." + COLUMN_MANAGER_LNAME + ", " +
+                    TABLE_CLUB + "." + COLUMN_CLUB_NAME + " FROM " + TABLE_MANAGER + " JOIN " + TABLE_CLUB +
+                    " ON " + TABLE_MANAGER + "." + COLUMN_MANAGER_CURRENT_CLUB + " = "
+                    + TABLE_CLUB + "." + COLUMN_CLUB_ID + " WHERE " + TABLE_CLUB + "." + COLUMN_CLUB_NAME + " = ?";
 
     private Connection connection;
+    private PreparedStatement queryClubManager;
     public boolean open() {
         try {
         connection = DriverManager.getConnection(CONNECTION_STRING, USERNAME, PASSWORD);
+        queryClubManager = connection.prepareStatement(QUERY_CLUB_MANAGER_PREP);
             System.out.println("Connected to " + CONNECTION_STRING + USERNAME + PASSWORD);
             return true;
         } catch (SQLException e) {
@@ -58,6 +65,9 @@ public class DataSource {
 
     public void close() {
         try {
+            if(queryClubManager != null) {
+                queryClubManager.close();
+            }
             if(connection != null) {
                 connection.close();
             }
@@ -101,23 +111,39 @@ public class DataSource {
             }
         }
 
+//    public String queryClubManager(String clubName) {
+//        StringBuilder stringBuilder = new StringBuilder(QUERY_CLUB_MANAGER);
+//        stringBuilder.append(" WHERE " + TABLE_CLUB + "." + COLUMN_CLUB_NAME + " = " + "'" + clubName + "'");
+//
+//        System.out.println(stringBuilder.toString());
+//
+//        try(Statement statement = connection.createStatement()) {
+//            ResultSet result = statement.executeQuery(stringBuilder.toString());
+//                Manager manager = new Manager();
+//            while (result.next()) {
+//                manager.setLastName(result.getString(1));
+//            }
+//
+//               return clubName + "'s manager: " + manager.getLastName();
+//           } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//        return null;
+//        }
+//    }
+
     public String queryClubManager(String clubName) {
-        StringBuilder stringBuilder = new StringBuilder(QUERY_CLUB_MANAGER);
-        stringBuilder.append(" WHERE " + TABLE_CLUB + "." + COLUMN_CLUB_NAME + " = " + "'" + clubName + "'");
-
-        System.out.println(stringBuilder.toString());
-
-        try(Statement statement = connection.createStatement()) {
-            ResultSet result = statement.executeQuery(stringBuilder.toString());
-                Manager manager = new Manager();
+        try{
+            queryClubManager.setString(1, clubName);
+            ResultSet result = queryClubManager.executeQuery();;
+            Manager manager = new Manager();
             while (result.next()) {
                 manager.setLastName(result.getString(1));
             }
 
-               return clubName + "'s manager: " + manager.getLastName();
-           } catch (SQLException e) {
+            return clubName + "'s manager: " + manager.getLastName();
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
-        return null;
+            return null;
         }
     }
 
