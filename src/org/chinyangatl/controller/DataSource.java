@@ -49,12 +49,35 @@ public class DataSource {
                     " ON " + TABLE_MANAGER + "." + COLUMN_MANAGER_CURRENT_CLUB + " = "
                     + TABLE_CLUB + "." + COLUMN_CLUB_ID + " WHERE " + TABLE_CLUB + "." + COLUMN_CLUB_NAME + " = ?";
 
+    // check if values to be inserted already exist
+    public static final String QUERY_CLUB = "SELECT " +
+            COLUMN_CLUB_ID + " FROM " + TABLE_CLUB + " WHERE "
+            + COLUMN_CLUB_NAME + " ?";
+
+    // statemetns needed to insert a manager
+    public static final String INSERT_CLUB =
+            "INSERT INTO " + TABLE_CLUB + '(' + COLUMN_CLUB_NAME + ") VALUES(?)";
+
+    public static final String INSERT_MANAGER =
+            "INSERT INTO " + TABLE_MANAGER +
+                    '(' + COLUMN_MANAGER_FNAME + ", " + COLUMN_MANAGER_LNAME + ", " + COLUMN_MANAGER_CURRENT_CLUB + ") " +
+                    "VALUES(?, ?, ?)";
+
     private Connection connection;
     private PreparedStatement queryClubManager;
+
+    private PreparedStatement queryClub;
+
+    private PreparedStatement insertIntoClub;
+    private PreparedStatement insertIntoManager;
+
     public boolean open() {
         try {
         connection = DriverManager.getConnection(CONNECTION_STRING, USERNAME, PASSWORD);
         queryClubManager = connection.prepareStatement(QUERY_CLUB_MANAGER_PREP);
+        insertIntoClub = connection.prepareStatement(INSERT_CLUB);
+        queryClub = connection.prepareStatement(QUERY_CLUB);
+        insertIntoManager = connection.prepareStatement(INSERT_MANAGER);
             System.out.println("Connected to " + CONNECTION_STRING + USERNAME + PASSWORD);
             return true;
         } catch (SQLException e) {
@@ -67,6 +90,15 @@ public class DataSource {
         try {
             if(queryClubManager != null) {
                 queryClubManager.close();
+            }
+            if(insertIntoClub != null) {
+                insertIntoClub.close();
+            }
+            if(insertIntoManager != null) {
+                insertIntoManager.close();
+            }
+            if(queryClub != null) {
+                queryClub.close();
             }
             if(connection != null) {
                 connection.close();
@@ -144,6 +176,58 @@ public class DataSource {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
+        }
+    }
+
+    private int insertClub(String clubName) throws SQLException{
+        queryClub.setString(1, clubName);
+        ResultSet resultSet = queryClub.executeQuery();
+        // club already exists, ie found in db, return that id
+        if(resultSet.next()) {
+            return resultSet.getInt(1);
+        } else {
+            // club doesnt exist,
+            insertIntoClub.setString(1, clubName);
+            int affectedRows = insertIntoClub.executeUpdate();
+
+            if(affectedRows != 1) {
+                throw new SQLException("Couldn't insert club");
+            }
+
+            // get the id returned
+            ResultSet generatedKeys = insertIntoClub.getGeneratedKeys();
+            if(generatedKeys.next()) {
+                return generatedKeys.getInt(1);
+            } else {
+                throw new SQLException("Couldnt get id for club");
+            }
+        }
+    }
+
+    public void insertManager(String fName, String lName, String clubName) {
+        try {
+            connection.setAutoCommit(false);
+            int clubId = insertClub(clubName);
+            insertIntoManager.setString(1, fName);
+            insertIntoManager.setString(2, lName);
+            insertIntoManager.setInt(3, clubId);
+
+            int affectedRows = insertIntoClub.executeUpdate();
+            if(affectedRows == 1) {
+//                success
+                connection.commit();
+            } else {
+                throw new SQLException("Couldn't insert song " );
+            }
+        } catch (SQLException e) {
+            System.out.println("Insert Manager exception: " + e.getMessage());
+        } finally {
+            try {
+                System.out.println("Reset default commit behaviour");
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.out.println("Couldn't reset auto commit " + e.getMessage());
+            }
         }
     }
 
